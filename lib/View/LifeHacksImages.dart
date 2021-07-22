@@ -10,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io' show Platform;
 
 class LifeHacksImages extends StatefulWidget {
   @override
@@ -218,6 +219,7 @@ class _ImageDetailState extends State<ImageDetail> {
       });
     } catch (e) {
       print('Failed to get wallpaper.');
+      showToast('Failed to get wallpaper.');
     }
   }
 
@@ -269,12 +271,14 @@ class _ImageDetailState extends State<ImageDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.image),
-                      onPressed: () {
-                        openDialog(context, res.docs[_index]['imageUrl']);
-                      },
-                    ),
+                    Platform.isAndroid
+                        ? IconButton(
+                            icon: Icon(Icons.image),
+                            onPressed: () {
+                              openDialog(context, res.docs[_index]['imageUrl']);
+                            },
+                          )
+                        : SizedBox(),
                     IconButton(
                       icon: Icon(Icons.download_rounded),
                       onPressed: () async {
